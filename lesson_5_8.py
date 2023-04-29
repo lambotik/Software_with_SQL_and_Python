@@ -15,7 +15,7 @@ def check_that_int():
 def select_one_option():
     options_list = [1, 2, 3]
     while True:
-        print('Select one of the number options: 1.Registration, 2.Authorisation, 3.Password recovery: ')
+        print('Select one of the number options: \n1.Registration \n2.Authorisation \n3.Password recovery: ')
         try:
             a = int(input())
             if a in options_list:
@@ -23,14 +23,73 @@ def select_one_option():
         except ValueError:
             print('You must enter a number')
 
+
 def gen_dict(val):
     result = val
     login_password = {}
-    for k, v in list(result):
-        login_password[k] = v
-        print(k, v)
+    for login, password, code in list(result):
+        login_password[login] = password, code
     print(login_password)
     return login_password
+
+
+def check_login_and_password(database_dict):
+    while True:
+        print('Input your Login: ')
+        login = input()
+        if login in database_dict:
+            print('Login is correct')
+        else:
+            login in database_dict == False
+            print('User not registered')
+            break
+        print('Input your Password: ')
+        password = input()
+        if password in database_dict.get(login):
+            print('Password is correct')
+            print('Authorization Success')
+            break
+        else:
+            print('Password is not correct')
+            print('Try again')
+            print('Select Y/N')
+            answer = input()
+            answer = answer.lower()
+            if answer == 'y':
+                continue
+            else:
+                break
+
+
+def recovery_password(database_dict):
+    while True:
+        print('Input your Login: ')
+        login = input()
+        if login in database_dict:
+            print('Login is correct')
+        else:
+            login in database_dict == False
+            print('User is not registration')
+            break
+        print('Input your Code: ')
+        code = input()
+        if code in str(database_dict.get(login)[1]):
+            print(database_dict.get(login)[1])
+            print('Code is correct')
+            print('Input new password')
+            password = input()
+            print('Password has been recovered')
+            break
+        else:
+            print('Code is not correct')
+            print('Try again')
+            print('Select Y/N')
+            answer = input()
+            answer = answer.lower()
+            if answer == 'y':
+                continue
+            else:
+                break
 
 
 print('Block #1')
@@ -40,18 +99,17 @@ try:
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
     '''Create table users_data'''
-    # user_value = "('Ivan', 'qwer1234', 1234)"
-    # cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_data
-    #                     (Login text not null primary key ,
-    #                      Password text not null ,
-    #                      Code  integer not null);
-    #
-    #                      INSERT INTO users_data(Login, Password, Code)
-    #                         values {user_value};''')
-    # database.commit()
+    user_value = "('Ivan', 'qwer1234', 1234)"
+    cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_data
+                        (Login text not null primary key ,
+                         Password text not null ,
+                         Code  integer not null);
+
+                         INSERT INTO users_data(Login, Password, Code)
+                            values {user_value};''')
+    database.commit()
     cursor.execute('''select "Login" from users_data;''')
     user_in_database = cursor.fetchall()
-    database.commit()
     print('Login in database', user_in_database)
     print('Table created')
     print('User added')
@@ -67,8 +125,9 @@ try:
         password_output = password
         code = check_that_int()
         code_output = code
-        cursor.execute('''select Login from users_data;''')
+        cursor.execute('''select Login, Password, Code from users_data;''')
         login_on_table = cursor.fetchall()
+        print(login_on_table)
         loginID_list = []
         for i in range(len(login_on_table)):
             loginID_list.append(login_on_table[i][0])
@@ -85,11 +144,15 @@ try:
 
     if choice == 2:
         print('Authorization in the system')
-        cursor.execute('''select Login, Password from users_data;''')
+        cursor.execute('''Select Login, Password, Code from users_data;''')
         result = cursor.fetchall()
-        gen_dict(result)
-        print(f'Authorisation complete')
+        database_dict = gen_dict(result)
+        check_login_and_password(database_dict)
     if choice == 3:
+        cursor.execute('''Select Login, Password, Code from users_data;''')
+        result = cursor.fetchall()
+        database_dict = gen_dict(result)
+        recovery_password(database_dict)
         print(f'Password recovery complete')
 
 finally:

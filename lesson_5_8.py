@@ -1,4 +1,5 @@
 import sqlite3
+from database.database_path import DATABASE_DIR
 
 
 def check_that_int():
@@ -95,7 +96,8 @@ def recovery_password(database_dict):
 print('Block #1')
 '''Creating database'''
 try:
-    database = sqlite3.connect(r'C:\Users\lambo\PycharmProjects\SQL_Python\registration.db')  # Creating database
+    # database = sqlite3.connect(r'C:\Users\lambo\PycharmProjects\SQL_Python\registration.db')  # Creating database
+    database = sqlite3.connect(DATABASE_DIR / (r'registration' + '.db'))  # Creating database
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
     '''Create table users_data'''

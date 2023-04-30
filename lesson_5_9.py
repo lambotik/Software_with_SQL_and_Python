@@ -13,6 +13,7 @@ def select_currency():
         except ValueError:
             print('You must enter a number')
 
+
 def what_amount_are_you_interested_in():
     while True:
         print('What amount are you interested in?: ')
@@ -29,38 +30,19 @@ def what_amount_are_you_interested_in():
         except ValueError:
             print('You must enter a number')
 
-def select_currency_for_exchenge(not_change):
-    error = not_change
-    print('Select a value other than:', error)
+
+def select_currency_for_exchenge(error):
     options_list = [1, 2, 3]
     while True:
-        print('What currency do you want to exchange: \n1. RUB \n2. USD \n3. EUR')
-        currency = int(input())
-        if type(currency) != int:
-            continue
-        elif currency in options_list and error == currency and type(currency) == int:
-            print('You cannot exchange the same currencies')
-            print('Select another value')
-            print('What currency do you want to exchange: \n1. RUB \n2. USD \n3. EUR')
-            while True:
-                try:
-                    b = int(input())
-                    sum = b
-                    if type(b) == int and b != currency:
-                        print(f'You entered: {sum}')
-                    else:
-                        print('You cannot exchange the same currencies')
-                        print('Select another value')
-                        print('What currency do you want to exchange: \n1. RUB \n2. USD \n3. EUR')
-                        continue
-                    return b
-                except ValueError:
-                    print('You must enter a number')
-        else:
-            break
-
-
-
+        print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
+        print('You cannot exchange the same currencies')
+        print(f'Select another value than {error}')
+        try:
+            a = input()
+            if int(a) in options_list and int(a) != error:
+                return a
+        except ValueError:
+            print('You must enter a number')
 
 '''Creating Database'''
 try:
@@ -80,17 +62,16 @@ try:
     # database.commit()
     cursor.execute('''select "Login" from users_balance;''')
     user_in_database = cursor.fetchall()
-    # print('Login in database', user_in_database)
+    print('Login in database', user_in_database)
     print('Table created')
     print(f'User added')
     print('Welcome to our exchange office, current exchange rate:')
     print('1 USD = 70 RUB\n1 EUR = 80 RUB\n1 USD = 0.87 EUR\n1 EUR = 1.15 USD\n')
     selected_currency = select_currency()
-    print(selected_currency)
     sum_for_change = what_amount_are_you_interested_in()
-    print(sum_for_change)
-    currency_for_exchange = select_currency()
-    x = select_currency_for_exchenge(currency_for_exchange)
+    currency_for_exchange = select_currency_for_exchenge(selected_currency)
+
+
 
 
 

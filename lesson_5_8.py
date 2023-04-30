@@ -69,9 +69,10 @@ def recovery_password(database_dict):
         if login in database_dict:
             print('Login is correct')
         else:
-            login in database_dict == False
-            print('User is not registration')
-            break
+            while login not in database_dict:
+                print('User is not registration')
+                print('Input your Login: ')
+                login = input()
         print('Input your Code: ')
         code = input()
         if code in str(database_dict.get(login)[1]):
@@ -100,21 +101,21 @@ try:
     database = sqlite3.connect(DATABASE_DIR / (r'registration' + '.db'))  # Creating database
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
-    '''Create table users_data'''
-    user_value = "('Ivan', 'qwer1234', 1234)"
-    cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_data
-                        (Login text not null primary key ,
-                         Password text not null ,
-                         Code  integer not null);
-
-                         INSERT INTO users_data(Login, Password, Code)
-                            values {user_value};''')
-    database.commit()
-    cursor.execute('''select "Login" from users_data;''')
-    user_in_database = cursor.fetchall()
-    print('Login in database', user_in_database)
-    print('Table created')
-    print('User added')
+    # '''Create table users_data'''
+    # user_value = "('Ivan', 'qwer1234', 1234)"
+    # cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_data
+    #                     (Login text not null primary key ,
+    #                      Password text not null ,
+    #                      Code  integer not null);
+    #
+    #                      INSERT INTO users_data(Login, Password, Code)
+    #                         values {user_value};''')
+    # database.commit()
+    # cursor.execute('''select "Login" from users_data;''')
+    # user_in_database = cursor.fetchall()
+    # print('Login in database', user_in_database)
+    # print('Table created')
+    # print('User added')
 
     print('\nBlock #2')
     choice = select_one_option()
@@ -155,7 +156,6 @@ try:
         result = cursor.fetchall()
         database_dict = gen_dict(result)
         recovery_password(database_dict)
-        print(f'Password recovery complete')
 
 finally:
     cursor.close()

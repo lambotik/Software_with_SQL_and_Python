@@ -1,7 +1,9 @@
 import sqlite3
 from database.database_path import DATABASE_DIR
 
-
+exchange_data = {1: 'RUB', 2: 'USD', 3: 'EUR'}
+database_users = {1: 'Balance_RUB', 2: 'Balance_USD', 3: 'Balance_EUR'}
+exchange_rates = {'USD': (70, 'RUB'), 'EUR': (80, 'RUB'), 'USD': (0.87, 'EUR'), 'EUR': (1.15, 'USD')}
 def select_currency():
     options_list = [1, 2, 3]
     while True:
@@ -35,7 +37,7 @@ def select_currency_for_exchenge(error):
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
-        print('You cannot exchange the same currencies')
+        print('Remember that you cannot exchange the same currencies')
         print(f'Select another value than {error}')
         try:
             a = input()
@@ -70,8 +72,15 @@ try:
     selected_currency = select_currency()
     sum_for_change = what_amount_are_you_interested_in()
     currency_for_exchange = select_currency_for_exchenge(selected_currency)
-
-
+    cursor.execute(f'''select {database_users.get(selected_currency)} from users_balance
+    Where Login == 'Dima';''')
+    user_data = cursor.fetchall()
+    if user_data[0][0] >= sum_for_change:
+        print()
+    print(user_data[0][0])
+    print(exchange_rates[1])
+    print('Валюта к обмену', exchange_rates.get('RUB'))
+    print('Валюта на которую меняем')
 
 
 

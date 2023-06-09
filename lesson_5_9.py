@@ -3,34 +3,38 @@ from database.database_path import DATABASE_DIR
 
 exchange_data = {1: 'RUB', 2: 'USD', 3: 'EUR'}
 database_users = {1: 'Balance_RUB', 2: 'Balance_USD', 3: 'Balance_EUR'}
-exchange_rates = {'USD': (70, 'RUB'), 'EUR': (80, 'RUB'), 'USD': (0.87, 'EUR'), 'EUR': (1.15, 'USD')}
+exchange_rates = {'USD': {'RUB': 70, 'EUR': 0.87},
+                  'EUR': {'USD': 1.15, 'RUB': 80},
+                  'RUB': {'USD': 0.07, 'EUR': 0.08}}
+
+
 def select_currency():
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
         try:
-            a = int(input())
-            if a in options_list:
-                return a
+            option = int(input())
+            if option in options_list:
+                return option
         except ValueError:
             print('You must enter a number')
 
 
 def what_amount_are_you_interested_in():
     while True:
-        print('What amount are you interested in?: ')
+        print('How much do you want to exchange?: ')
         try:
-            a = int(input())
-            sum = a
-            if type(a) == int:
+            option = int(input())
+            sum = option
+            if type(option) == int:
                 print(f'You entered sum: {sum}')
                 if sum <= 0:
                     print('Sum should be > 0')
                     continue
                 else:
-                    return a
+                    return option
         except ValueError:
-            print('You must enter a number')
+            print('You must enter option number')
 
 
 def select_currency_for_exchenge(error):
@@ -40,48 +44,63 @@ def select_currency_for_exchenge(error):
         print('Remember that you cannot exchange the same currencies')
         print(f'Select another value than {error}')
         try:
-            a = input()
-            if int(a) in options_list and int(a) != error:
-                return a
+            option = input()
+            if int(option) in options_list and int(option) != error:
+                return int(option)
         except ValueError:
-            print('You must enter a number')
+            print('You must enter option number')
+
+
+def check_that_user_have_enough_money(user_money, request):
+    while True:
+        if user_money > request:
+            return request
+        else:
+            while user_money < request:
+                print('You have not enough money')
+                request = what_amount_are_you_interested_in()
+            return request
+
 
 '''Creating Database'''
 try:
     database = sqlite3.connect(DATABASE_DIR / (r'exchanger' + '.db'))  # Creating database
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
-    # '''Create table users_data'''
-    # user_value = "('Igor', 100000, 1000, 1000)"
-    # cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_balance
-    #                     (Login text not null primary key ,
-    #                      Balance_RUB INTEGER not null ,
-    #                      Balance_USD INTEGER not null ,
-    #                      Balance_EUR INTEGER not null);
-    #
-    #                      INSERT INTO users_balance(Login, Balance_RUB, Balance_USD, Balance_EUR)
-    #                         values {user_value};''')
-    # database.commit()
+    '''Create table users_data'''
+    user_value = "('Igor', 100000, 1000, 1000)"
+    cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_balance
+                        (Login text not null primary key ,
+                         Balance_RUB INTEGER not null ,
+                         Balance_USD INTEGER not null ,
+                         Balance_EUR INTEGER not null);
+
+                         INSERT INTO users_balance(Login, Balance_RUB, Balance_USD, Balance_EUR)
+                            values {user_value};''')
+    database.commit()
     cursor.execute('''select "Login" from users_balance;''')
     user_in_database = cursor.fetchall()
-    print('Login in database', user_in_database)
     print('Table created')
     print(f'User added')
     print('Welcome to our exchange office, current exchange rate:')
     print('1 USD = 70 RUB\n1 EUR = 80 RUB\n1 USD = 0.87 EUR\n1 EUR = 1.15 USD\n')
     selected_currency = select_currency()
-    sum_for_change = what_amount_are_you_interested_in()
-    currency_for_exchange = select_currency_for_exchenge(selected_currency)
     cursor.execute(f'''select {database_users.get(selected_currency)} from users_balance
-    Where Login == 'Dima';''')
+        Where Login == 'Igor';''')
     user_data = cursor.fetchall()
-    if user_data[0][0] >= sum_for_change:
-        print()
-    print(user_data[0][0])
-    print(exchange_rates[1])
-    print('Валюта к обмену', exchange_rates.get('RUB'))
-    print('Валюта на которую меняем')
-
+    print('On your balance:', (user_data[0][0]), exchange_data.get(selected_currency))
+    sum_for_change = what_amount_are_you_interested_in()
+    selected_sum = check_that_user_have_enough_money(int(user_data[0][0]), sum_for_change)
+    currency_for_exchange = select_currency_for_exchenge(selected_currency)
+    print()
+    print('Available funds for exchange', user_data[0][0], exchange_data.get(selected_currency))
+    print('Currency to be exchanged:', selected_sum, exchange_data.get(selected_currency))
+    rate = exchange_rates.get(exchange_data.get(selected_currency)).get(exchange_data.get(currency_for_exchange))
+    cash = selected_sum * rate
+    # print('Rate',
+    #       exchange_rates.get(exchange_data.get(selected_currency)).get(exchange_data.get(currency_for_exchange)))
+    print('Currency to which we change', exchange_data.get(currency_for_exchange))
+    print(f'You are getting: {round(cash, 2)}', exchange_data.get(currency_for_exchange))
 
 
 finally:

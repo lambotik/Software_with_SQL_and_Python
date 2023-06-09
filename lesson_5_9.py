@@ -9,6 +9,8 @@ exchange_rates = {'USD': {'RUB': 70, 'EUR': 0.87},
 
 
 def select_currency():
+    '''Returns one value from the given options
+    :return -> int'''
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
@@ -21,6 +23,8 @@ def select_currency():
 
 
 def what_amount_are_you_interested_in():
+    '''Takes a sum value and checks if it is greater than 0
+    :return -> int'''
     while True:
         print('How much do you want to exchange?: ')
         try:
@@ -38,6 +42,8 @@ def what_amount_are_you_interested_in():
 
 
 def select_currency_for_exchenge(error):
+    '''Offers to choose from the available options, excluding the passed value (error)
+    :param error -> int'''
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
@@ -52,6 +58,11 @@ def select_currency_for_exchenge(error):
 
 
 def check_that_user_have_enough_money(user_money, request):
+    '''Compare that user have enough money:
+    :return request -> int
+    :param user_money -> int(intput())
+    :param request -> int(intput())
+    '''
     while True:
         if user_money > request:
             return request

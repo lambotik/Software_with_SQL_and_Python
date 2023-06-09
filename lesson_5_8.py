@@ -39,11 +39,11 @@ def check_login():
     cursor = database.cursor()  # Variable to control the database
     cursor.execute('''select Login, Password, Code from users_data;''')
     login_on_table = cursor.fetchall()
-    print(login_on_table)
+    # print(login_on_table)
     loginID_list = []
     for i in range(len(login_on_table)):
         loginID_list.append(login_on_table[i][0])
-    print('LoginID list: ', loginID_list)
+    # print('LoginID list: ', loginID_list)
     while True:
         print('Input your Login:')
         login = input()
@@ -275,12 +275,12 @@ try:
         cursor.execute('''Select Login, Password, Code from users_data;''')
         result = cursor.fetchall()
         database_dict = gen_dict(result)
-        login = list(database_dict.keys())[0]
-        code = list(database_dict.items())[0][1][1]
-        new_password, user_name = recovery_password(database_dict)
-        cursor.execute(f"""UPDATE users_data SET Password = '{new_password}' WHERE Login = '{user_name}';""")
-        database.commit()
-        print('Password has been recovered')
+        try:
+            new_password, user_name = recovery_password(database_dict)
+            cursor.execute(f"""UPDATE users_data SET Password = '{new_password}' WHERE Login = '{user_name}';""")
+            database.commit()
+        except TypeError:
+            print('Password has been recovered')
 
 finally:
     cursor.close()

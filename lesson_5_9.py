@@ -9,8 +9,8 @@ exchange_rates = {'USD': {'RUB': 70, 'EUR': 0.87},
 
 
 def select_currency():
-    '''Returns one value from the given options
-    :return -> int'''
+    """Returns one value from the given options
+    :return -> int"""
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
@@ -23,16 +23,16 @@ def select_currency():
 
 
 def what_amount_are_you_interested_in():
-    '''Takes a sum value and checks if it is greater than 0
-    :return -> int'''
+    """Takes amount value and checks if it is greater than 0
+    :return -> int"""
     while True:
         print('How much do you want to exchange?: ')
         try:
             option = int(input())
-            sum = option
+            amount = option
             if type(option) == int:
-                print(f'You entered sum: {sum}')
-                if sum <= 0:
+                print(f'You entered amount: {amount}')
+                if amount <= 0:
                     print('Sum should be > 0')
                     continue
                 else:
@@ -42,8 +42,8 @@ def what_amount_are_you_interested_in():
 
 
 def select_currency_for_exchenge(error):
-    '''Offers to choose from the available options, excluding the passed value (error)
-    :param error -> int'''
+    """Offers to choose from the available options, excluding the passed value (error)
+    :param error -> int"""
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
@@ -58,11 +58,11 @@ def select_currency_for_exchenge(error):
 
 
 def check_that_user_have_enough_money(user_money, request):
-    '''Compare that user have enough money:
+    """Compare that user have enough money:
     :return request -> int
     :param user_money -> int(intput())
     :param request -> int(intput())
-    '''
+    """
     while True:
         if user_money > request:
             return request
@@ -110,8 +110,31 @@ try:
     cash = selected_sum * rate
     # print('Rate',
     #       exchange_rates.get(exchange_data.get(selected_currency)).get(exchange_data.get(currency_for_exchange)))
-    print('Currency to which we change', exchange_data.get(currency_for_exchange))
+    print('The course we are changing', rate, exchange_data.get(currency_for_exchange))
     print(f'You are getting: {round(cash, 2)}', exchange_data.get(currency_for_exchange))
+    minus_balance_name = database_users.get(selected_currency)
+    plus_balance_name = database_users.get(currency_for_exchange)
+    # print(int(user_data[0][0]) - selected_sum)
+    # print('Minus name', minus_balance_name)
+    # print('Plus name', plus_balance_name)
+    cursor.execute(f'''select {database_users.get(currency_for_exchange)} from users_balance
+            Where Login == 'Igor';''')
+    plus_currency = cursor.fetchall()
+    plus_currency = plus_currency[0][0]
+    minus_currency = user_data[0][0]
+    # print('Minus', user_data[0][0])
+    # print('Plus', plus_currency)
+    cursor.execute(f"""UPDATE users_balance SET {minus_balance_name} = '{minus_currency - selected_sum}' 
+    WHERE Login = 'Igor';""")
+    database.commit()
+    cursor.execute(f"""UPDATE users_balance SET {plus_balance_name} = '{plus_currency + cash}' 
+    WHERE Login = 'Igor';""")
+    database.commit()
+    cursor.execute(f'''select * from users_balance Where Login == 'Igor';''')
+    current_balance = cursor.fetchall()
+    print('Your current balance:\n', current_balance[0][1], exchange_data.get(1), '\n',
+          current_balance[0][2], exchange_data.get(2), '\n',
+          current_balance[0][3], exchange_data.get(3))
 
 
 finally:

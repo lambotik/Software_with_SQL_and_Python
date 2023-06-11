@@ -1,7 +1,7 @@
 import sqlite3
 
 '''Connecting to database'''
-database = sqlite3.connect(r'database/sql_join.db')  # Connecting to database
+database = sqlite3.connect(r'../database/sql_join.db')  # Connecting to database
 print('Connecting to database is complete\n')
 cursor = database.cursor()  # Variable to control the database
 # cursor.execute('''select * from Positions''')

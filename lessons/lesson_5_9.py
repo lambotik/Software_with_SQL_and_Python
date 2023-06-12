@@ -79,15 +79,15 @@ try:
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
     '''Create table users_data'''
-    user_value = "('Igor', 100000, 1000, 1000)"
-    cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_balance
-                        (Login text not null primary key ,
-                         Balance_RUB INTEGER not null ,
-                         Balance_USD INTEGER not null ,
-                         Balance_EUR INTEGER not null);
+    user_value = "(10000, 980, 1017)"
+    cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_balance(
+                             LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
+                             Balance_RUB INTEGER not null,
+                             Balance_USD INTEGER not null,
+                             Balance_EUR INTEGER not null);
 
-                         INSERT INTO users_balance(Login, Balance_RUB, Balance_USD, Balance_EUR)
-                            values {user_value};''')
+                             INSERT INTO users_balance(Balance_RUB, Balance_USD, Balance_EUR)
+                                values {user_value};''')
     database.commit()
     cursor.execute('''select "Login" from users_balance;''')
     user_in_database = cursor.fetchall()
@@ -96,45 +96,34 @@ try:
     print('Welcome to our exchange office, current exchange rate:')
     print('1 USD = 70 RUB\n1 EUR = 80 RUB\n1 USD = 0.87 EUR\n1 EUR = 1.15 USD\n')
     selected_currency = select_currency()
-    cursor.execute(f'''select {database_users.get(selected_currency)} from users_balance
-        Where Login == 'Igor';''')
+    cursor.execute(f'''select {database_users.get(selected_currency)} from users_balance''')
     user_data = cursor.fetchall()
-    print('On your balance:', (user_data[0][0]), exchange_data.get(selected_currency))
+    print('On your balance:', round(float(user_data[0][0]), 2), exchange_data.get(selected_currency))
     sum_for_change = what_amount_are_you_interested_in()
-    selected_sum = check_that_user_have_enough_money(int(user_data[0][0]), sum_for_change)
+    selected_sum = check_that_user_have_enough_money(float(user_data[0][0]), sum_for_change)
     currency_for_exchange = select_currency_for_exchenge(selected_currency)
     print()
     print('Available funds for exchange', user_data[0][0], exchange_data.get(selected_currency))
     print('Currency to be exchanged:', selected_sum, exchange_data.get(selected_currency))
     rate = exchange_rates.get(exchange_data.get(selected_currency)).get(exchange_data.get(currency_for_exchange))
     cash = selected_sum * rate
-    # print('Rate',
-    #       exchange_rates.get(exchange_data.get(selected_currency)).get(exchange_data.get(currency_for_exchange)))
     print('The course we are changing', rate, exchange_data.get(currency_for_exchange))
     print(f'You are getting: {round(cash, 2)}', exchange_data.get(currency_for_exchange))
     minus_balance_name = database_users.get(selected_currency)
     plus_balance_name = database_users.get(currency_for_exchange)
-    # print(int(user_data[0][0]) - selected_sum)
-    # print('Minus name', minus_balance_name)
-    # print('Plus name', plus_balance_name)
-    cursor.execute(f'''select {database_users.get(currency_for_exchange)} from users_balance
-            Where Login == 'Igor';''')
+    cursor.execute(f'''select {database_users.get(currency_for_exchange)} from users_balance''')
     plus_currency = cursor.fetchall()
     plus_currency = plus_currency[0][0]
     minus_currency = user_data[0][0]
-    # print('Minus', user_data[0][0])
-    # print('Plus', plus_currency)
-    cursor.execute(f"""UPDATE users_balance SET {minus_balance_name} = '{minus_currency - selected_sum}' 
-    WHERE Login = 'Igor';""")
+    cursor.execute(f"""UPDATE users_balance SET {minus_balance_name} = '{minus_currency - selected_sum}';""")
     database.commit()
-    cursor.execute(f"""UPDATE users_balance SET {plus_balance_name} = '{plus_currency + cash}' 
-    WHERE Login = 'Igor';""")
+    cursor.execute(f"""UPDATE users_balance SET {plus_balance_name} = '{plus_currency + cash}';""")
     database.commit()
-    cursor.execute(f'''select * from users_balance Where Login == 'Igor';''')
+    cursor.execute(f'''select * from users_balance;''')
     current_balance = cursor.fetchall()
-    print('Your current balance:\n', current_balance[0][1], exchange_data.get(1), '\n',
-          current_balance[0][2], exchange_data.get(2), '\n',
-          current_balance[0][3], exchange_data.get(3))
+    print('Your current balance:\n', round(float(current_balance[0][1]), 2), exchange_data.get(1), '\n',
+          round(float(current_balance[0][2]), 2), exchange_data.get(2), '\n',
+          round(float(current_balance[0][3]), 2), exchange_data.get(3))
 
 
 finally:

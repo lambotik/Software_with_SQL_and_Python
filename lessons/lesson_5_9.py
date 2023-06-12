@@ -19,7 +19,7 @@ def select_currency():
             if option in options_list:
                 return option
         except ValueError:
-            print('You must enter a number')
+            print('You must enter a number.')
 
 
 def what_amount_are_you_interested_in():
@@ -38,7 +38,7 @@ def what_amount_are_you_interested_in():
                 else:
                     return option
         except ValueError:
-            print('You must enter option number')
+            print('You must enter option number.')
 
 
 def select_currency_for_exchenge(error):
@@ -47,14 +47,14 @@ def select_currency_for_exchenge(error):
     options_list = [1, 2, 3]
     while True:
         print('Enter which currency you want to exchange: \n1. RUB \n2. USD \n3. EUR')
-        print('Remember that you cannot exchange the same currencies')
-        print(f'Select another value than {error}')
+        print('Remember that you cannot exchange the same currencies.')
+        print(f'Select another value than: {error}')
         try:
             option = input()
             if int(option) in options_list and int(option) != error:
                 return int(option)
         except ValueError:
-            print('You must enter option number')
+            print('You must enter option number.')
 
 
 def check_that_user_have_enough_money(user_money, request):
@@ -68,7 +68,7 @@ def check_that_user_have_enough_money(user_money, request):
             return request
         else:
             while user_money < request:
-                print('You have not enough money')
+                print('You have not enough money.')
                 request = what_amount_are_you_interested_in()
             return request
 
@@ -76,7 +76,7 @@ def check_that_user_have_enough_money(user_money, request):
 '''Creating Database'''
 try:
     database = sqlite3.connect(DATABASE_DIR / (r'exchanger' + '.db'))  # Creating database
-    print('Connecting to database')
+    print('Connecting to database...')
     cursor = database.cursor()  # Variable to control the database
     '''Create table users_data'''
     user_value = "(10000, 980, 1017)"
@@ -91,8 +91,8 @@ try:
     database.commit()
     cursor.execute('''select "Login" from users_balance;''')
     user_in_database = cursor.fetchall()
-    print('Table created')
-    print(f'User added')
+    print('Table created.')
+    print(f'User added.\n')
     print('Welcome to our exchange office, current exchange rate:')
     print('1 USD = 70 RUB\n1 EUR = 80 RUB\n1 USD = 0.87 EUR\n1 EUR = 1.15 USD\n')
     selected_currency = select_currency()

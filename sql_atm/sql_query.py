@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class SQL_Atm:
+class SQLAtm:
 
     @staticmethod
     def create_table():
@@ -15,7 +15,6 @@ class SQL_Atm:
             Pin_code INTEGER NOT NULL,
             Balance INTEGER NOT NULL);''')
             print("Create table user data")
-
 
     @staticmethod
     def adding_user(user_data):

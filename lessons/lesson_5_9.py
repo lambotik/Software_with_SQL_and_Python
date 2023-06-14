@@ -33,7 +33,7 @@ def what_amount_are_you_interested_in():
             if type(option) == int:
                 print(f'You entered amount: {amount}')
                 if amount <= 0:
-                    print('Sum should be > 0')
+                    print('Amount should be bigger than 0')
                     continue
                 else:
                     return option
@@ -74,10 +74,11 @@ def check_that_user_have_enough_money(user_money, request):
 
 
 '''Creating Database'''
+database = sqlite3.connect(DATABASE_DIR / (r'exchanger' + '.db'))  # Creating database
+print('Connecting to database...')
+cursor = database.cursor()  # Variable to control the database
 try:
-    database = sqlite3.connect(DATABASE_DIR / (r'exchanger' + '.db'))  # Creating database
-    print('Connecting to database...')
-    cursor = database.cursor()  # Variable to control the database
+
     '''Create table users_data'''
     user_value = "(10000, 980, 1017)"
     cursor.executescript(f'''CREATE TABLE IF NOT EXISTS users_balance(

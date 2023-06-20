@@ -41,7 +41,7 @@ def what_amount_are_you_interested_in():
             print('You must enter option number.')
 
 
-def select_currency_for_exchenge(error):
+def select_currency_for_exchange(error):
     """Offers to choose from the available options, excluding the passed value (error)
     :param error -> int"""
     options_list = [1, 2, 3]
@@ -102,7 +102,7 @@ try:
     print('On your balance:', round(float(user_data[0][0]), 2), exchange_data.get(selected_currency))
     sum_for_change = what_amount_are_you_interested_in()
     selected_sum = check_that_user_have_enough_money(float(user_data[0][0]), sum_for_change)
-    currency_for_exchange = select_currency_for_exchenge(selected_currency)
+    currency_for_exchange = select_currency_for_exchange(selected_currency)
     print()
     print('Available funds for exchange', user_data[0][0], exchange_data.get(selected_currency))
     print('Currency to be exchanged:', selected_sum, exchange_data.get(selected_currency))

@@ -1,4 +1,9 @@
+import csv
 import sqlite3
+
+from datetime import datetime
+
+now_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
 
 class SQLAtm:
@@ -122,6 +127,7 @@ class SQLAtm:
                         WHERE Number_card = {card_number};''')
                     database.commit()
                     SQLAtm.info_balance(card_number)
+                    SQLAtm.report_operation_1(now_date, card_number, '1', amount_money, '')
                     return True
             except:
                 print('Attempt to do something wrong')
@@ -145,6 +151,7 @@ class SQLAtm:
                 SET Balance = Balance + {deposit_money};''')
                 database.commit()
                 SQLAtm.info_balance(card_number)
+                SQLAtm.report_operation_1(now_date, card_number, '2', deposit_money, '')
             except:
                 print('Attempt to do something wrong')
                 return False
@@ -230,3 +237,27 @@ class SQLAtm:
                 SQLAtm.transfer_money(card_number)
             else:
                 print('This operation is unavailable. We apologize.\nTry another operation.')
+
+    @staticmethod
+    def report_operation_1(date, number_card, type_operation, amount, payee):
+        # now_date, number_card, type_operation, amount, payee
+        """Operations Report.
+
+        Type_operation:
+
+        1 = Withdrawals
+
+        2 = Balance replenishment
+
+        3 = Transfer money"""
+        user_data = [
+            (date, number_card, type_operation, amount, payee)  # Table headers
+        ]
+        with open('report_1.csv', 'a', newline='') as file:  # newline - whitespace exception on newline
+            writer = csv.writer(file, delimiter=';')  # delimiter - separates newlines with ;
+            writer.writerows(
+                user_data
+            )
+        print('Data has been entered')
+
+# SQLAtm.report_operation_1()

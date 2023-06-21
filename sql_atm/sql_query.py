@@ -33,13 +33,13 @@ class SQLAtm:
             cursor.execute('''
             INSERT INTO Users_data (Number_card, Pin_code, Balance) 
             VALUES (?, ?, ?);''', data_user)
-            print("Adding a card.")
+            print(f"Adding a card: {data_user[0]}.")
 
     @staticmethod
     def input_card(number_card):
         """Enters card number and checks if it is in the database Users_data.
 
-        card_number = str"""
+        number_card = str"""
         try:
             with sqlite3.connect('atm.db') as database:
                 cursor = database.cursor()
@@ -58,17 +58,17 @@ class SQLAtm:
             print('Entered unknown card number.')
 
     @staticmethod
-    def input_code(card_number):
+    def input_code(number_card):
         """Input and check pincode.
 
-        card_number = str"""
+        number_card = str"""
         pincode = input('Enter please pincode from the card: ')
         with sqlite3.connect('atm.db') as database:
             cursor = database.cursor()
             cursor.execute(f'''
             SELECT Pin_code
             FROM Users_data
-            WHERE Number_card = {card_number}''')
+            WHERE Number_card = {number_card}''')
             result_pincode = cursor.fetchone()
             entered_pincode = result_pincode[0]
             try:
@@ -83,33 +83,33 @@ class SQLAtm:
                 return False
 
     @staticmethod
-    def info_balance(card_number):
+    def info_balance(number_card):
         """Displaying the balance of the card.
 
-        card_number = str"""
+        number_card = str"""
         with sqlite3.connect('atm.db') as database:
             cursor = database.cursor()
             cursor.execute(f'''
                 SELECT Balance
                 FROM Users_data
-                WHERE Number_card = {card_number}''')
+                WHERE Number_card = {number_card}''')
             result_balance = cursor.fetchone()
             card_balance = result_balance[0]
             print(f'Balance your card is: {card_balance}.')
-            return card_balance
+            # return card_balance
 
     @staticmethod
-    def withdrawing_money(card_number):
+    def withdrawing_money(number_card):
         """Withdrawing money from the card balance.
 
-        card_number = str"""
+        number_card = str"""
         amount_money = input('Enter how much money you want withdrawing: ')
         with sqlite3.connect('atm.db') as database:
             cursor = database.cursor()
             cursor.execute(f'''
                     SELECT Balance
                     FROM Users_data
-                    WHERE Number_card = {card_number}''')
+                    WHERE Number_card = {number_card}''')
             result_balance = cursor.fetchone()
             card_balance = result_balance[0]
             print(f'Balance your card is: {card_balance}.')
@@ -124,20 +124,20 @@ class SQLAtm:
                     cursor.execute(f'''
                         UPDATE Users_data
                         SET Balance = Balance - {amount_money}
-                        WHERE Number_card = {card_number};''')
+                        WHERE Number_card = {number_card};''')
                     database.commit()
-                    SQLAtm.info_balance(card_number)
-                    SQLAtm.report_operation_1(now_date, card_number, '1', amount_money, '')
+                    SQLAtm.info_balance(number_card)
+                    SQLAtm.report_operation_1(now_date, number_card, '1', amount_money, '')
                     return True
             except:
                 print('Attempt to do something wrong')
                 return False
 
     @staticmethod
-    def depositing_money(card_number):
+    def depositing_money(number_card):
         """Deposit money into account.
 
-        card_number = str"""
+        number_card = str"""
         deposit_money = input('Enter the amount you would like to deposit: ')
 
         with sqlite3.connect('atm.db') as database:
@@ -150,19 +150,18 @@ class SQLAtm:
                 UPDATE Users_data
                 SET Balance = Balance + {deposit_money};''')
                 database.commit()
-                SQLAtm.info_balance(card_number)
-                SQLAtm.report_operation_1(now_date, card_number, '2', deposit_money, '')
+                SQLAtm.info_balance(number_card)
+                SQLAtm.report_operation_1(now_date, number_card, '2', deposit_money, '')
             except:
                 print('Attempt to do something wrong')
                 return False
 
     @staticmethod
-    def transfer_money(card_number):
+    def transfer_money(number_card):
         """Transferring money to another card.
 
-        card_number = str"""
+        number_card = str"""
 
-        user_money = SQLAtm.info_balance(card_number)
         with sqlite3.connect('atm.db') as database:
             try:
                 cursor = database.cursor()
@@ -171,41 +170,46 @@ class SQLAtm:
                 FROM Users_data''')
                 result = cursor.fetchall()
                 list_cards = []
+                cursor.execute(f'''
+                SELECT Balance
+                FROM Users_data
+                WHERE Number_card LIKE {number_card}''')
+                result_user_balance = cursor.fetchone()
                 for i in range(len(result)):
                     list_cards.append(result[i][0])
                 number_for_transfer = input('Enter the card number to which you want to transfer money:')
-                if int(number_for_transfer) not in list_cards or int(number_for_transfer) == int(card_number):
+                if int(number_for_transfer) not in list_cards or int(number_for_transfer) == int(number_card):
                     print('Invalid card number.')
                     return False
+                money = input('Enter how much do you want to transfer:')
                 if int(number_for_transfer) in list_cards:
-                    money = input('Enter how much do you want to transfer:')
                     if int(money) <= 0:
                         print('Amount should be bigger than 0')
                         return False
-                    elif f'{int(money)}' <= f'{int(user_money)}':
-                        cursor.execute(f'''
-                        UPDATE Users_data
-                        SET Balance = Balance + {int(money)}
-                        WHERE Number_card LIKE {number_for_transfer};''')
-                        database.commit()
-                        cursor.execute(f'''
-                        UPDATE Users_data
-                        Set Balance = Balance - {int(money)}
-                        WHERE Number_card LIKE {card_number};''')
-                        database.commit()
-                        print('Transfer done')
-                        SQLAtm.report_operation_1(now_date, card_number, '3', money, number_for_transfer)
-                        SQLAtm.report_operation_2(now_date, number_for_transfer, '3', money, card_number)
-                        return True
-                    else:
-                        print('You have not enough founds')
-                        return False
+                if f'{int(money)}' <= f'{result_user_balance[0]}':
+                    cursor.execute(f'''
+                    UPDATE Users_data
+                    SET Balance = Balance + {int(money)}
+                    WHERE Number_card LIKE {int(number_for_transfer)};''')
+                    database.commit()
+                    cursor.execute(f'''
+                    UPDATE Users_data
+                    Set Balance = Balance - {int(money)}
+                    WHERE Number_card LIKE {int(number_card)};''')
+                    database.commit()
+                    print('Transfer done')
+                    SQLAtm.report_operation_1(now_date, number_card, '3', money, number_for_transfer)
+                    SQLAtm.report_operation_2(now_date, number_for_transfer, '3', money, number_card)
+                    return True
+                else:
+                    print('You have not enough founds')
+                    return False
             except:
                 print('Attempt to do something wrong')
                 return False
 
     @staticmethod
-    def select_operation(card_number):
+    def select_operation(number_card):
         """Select operation :
 
         1.Show balance information -> str
@@ -227,21 +231,21 @@ class SQLAtm:
                               '4. Finish work.\n'
                               '5. Transfer money.\n')
             if operation == '1':
-                SQLAtm.info_balance(card_number)
+                SQLAtm.info_balance(number_card)
             elif operation == '2':
-                SQLAtm.withdrawing_money(card_number)
+                SQLAtm.withdrawing_money(number_card)
             elif operation == '3':
-                SQLAtm.depositing_money(card_number)
+                SQLAtm.depositing_money(number_card)
             elif operation == '4':
                 print('Thank you for your visit. Have a good day.')
                 return False
             elif operation == '5':
-                SQLAtm.transfer_money(card_number)
+                SQLAtm.transfer_money(number_card)
             else:
                 print('This operation is unavailable. We apologize.\nTry another operation.')
 
     @staticmethod
-    def report_operation_1(date, card_number, type_operation, amount, payee):
+    def report_operation_1(date, number_card, type_operation, amount, payee):
         # now_date, card_number, type_operation, amount, payee
         """Operations Report.
 
@@ -253,14 +257,14 @@ class SQLAtm:
 
         3 = Transfer money"""
         user_data = [
-            (date, card_number, type_operation, amount, payee)  # Table headers
+            (date, number_card, type_operation, amount, payee)  # Table headers
         ]
         with open('report_1.csv', 'a', newline='') as file:  # newline - whitespace exception on newline
             writer = csv.writer(file, delimiter=';')  # delimiter - separates newlines with ;
             writer.writerows(
                 user_data
             )
-        print('Data has been entered')
+        print('Data has been added in: report_1.csv')
 
     @staticmethod
     def report_operation_2(date, payee, type_operation, amount, number_card):
@@ -287,7 +291,7 @@ class SQLAtm:
             writer.writerows(
                 user_data
             )
-        print('Data has been entered')
+        print('Data has been added in: report_2.csv')
 
 # SQLAtm.report_operation_1()
 # SQLAtm.report_operation_2()

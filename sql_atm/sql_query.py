@@ -175,7 +175,7 @@ class SQLAtm:
                 payer_balance = cursor.fetchone()[0]
                 print(f'Your balance: {payer_balance}')
                 recipient_card = input('Enter recipient card number:')
-                if int(recipient_card) not in list_cards:
+                if int(recipient_card) not in list_cards or recipient_card == number_card:
                     print('Invalid card number.')
                     return False
                 if int(recipient_card) in list_cards:

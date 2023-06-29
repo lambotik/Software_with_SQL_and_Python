@@ -11,7 +11,8 @@ class MOBILE:
         SQLMobile.insert_tariff(('Standard', 500))
         SQLMobile.insert_tariff(('VIP', 1000))
         SQLMobile.insert_tariff(('Premium', 1500))
-
+        period = input('Enter period calculation:')
+        SQLMobile.period_calculation(period)
 
 start = MOBILE()
 start.mobile_balance_check()

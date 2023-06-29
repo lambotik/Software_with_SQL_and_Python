@@ -59,3 +59,51 @@ class SQLMobile:
                 INSERT INTO mobile_tariff (Tariff, Price)
                 VALUES (?, ?);''', data_tariff)
             print(f'Adding a tariff: {data_tariff}.')
+
+    @staticmethod
+    def period_calculation(period):
+        with sqlite3.connect('mobile_operator.db') as database:
+            try:
+                cursor = database.cursor()
+                cursor.execute('''
+                SELECT User_name, Balance, Activity
+                FROM mobile_users;''')
+                before = cursor.fetchall()
+                print('Before:', *before)
+                cursor.execute('''
+                SELECT UserID, TariffID, Price, Balance, Activity, Mobile_tariff_ref, User_name 
+                FROM mobile_tariff
+                LEFT JOIN mobile_users ON "Mobile_tariff_ref" = "TariffID"
+                ORDER BY "UserID"''')
+                all_data = cursor.fetchall()
+                x = []
+                for data in all_data:
+                    x.append(list(data))
+                for data in x:
+                    if data[2] <= data[3] and (data[3] - data[2] * int(period)) >= 0 and data[4] == 'Yes':
+                        data[3] = data[3] - data[2] * int(period)
+                        if data[2] > data[3]:
+                            data[4] = 'No'
+                        new_value = (data[3], data[4], data[6])
+                        cursor.execute(f'''
+                        UPDATE mobile_users
+                        SET Balance = ?, Activity = ?
+                        WHERE User_name = ?;''', new_value)
+                        database.commit()
+                    else:
+                        print(f'{data[6]} have not enough founds')
+                        data[3] = 0
+                        data[4] = 'No'
+                        cursor.execute(f'''
+                        UPDATE mobile_users
+                        SET (Balance = {data[3]}, Activity = {data[4]})
+                        WHERE User_name = {data[6]};''')
+                        database.commit()
+
+                cursor.execute('''
+                SELECT User_name, Balance, Activity
+                FROM mobile_users;''')
+                after = cursor.fetchall()
+                print('After', *after)
+            except:
+                print('Somthing went wrong!')

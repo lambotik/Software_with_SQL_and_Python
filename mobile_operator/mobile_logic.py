@@ -64,14 +64,12 @@ class SQLMobile:
     def period_calculation(period):
         with sqlite3.connect('mobile_operator.db') as database:
             try:
+                if int(period) <= 0:
+                    print('Wrong data!')
+                    return False
                 cursor = database.cursor()
                 cursor.execute('''
-                SELECT User_name, Balance, Activity
-                FROM mobile_users;''')
-                before = cursor.fetchall()
-                print('Before:', *before)
-                cursor.execute('''
-                SELECT UserID, TariffID, Price, Balance, Activity, Mobile_tariff_ref, User_name 
+                SELECT User_name, Price, Balance, Activity
                 FROM mobile_tariff
                 LEFT JOIN mobile_users ON "Mobile_tariff_ref" = "TariffID"
                 ORDER BY "UserID"''')
@@ -79,31 +77,45 @@ class SQLMobile:
                 x = []
                 for data in all_data:
                     x.append(list(data))
-                for data in x:
-                    if data[2] <= data[3] and (data[3] - data[2] * int(period)) >= 0 and data[4] == 'Yes':
-                        data[3] = data[3] - data[2] * int(period)
-                        if data[2] > data[3]:
-                            data[4] = 'No'
-                        new_value = (data[3], data[4], data[6])
-                        cursor.execute(f'''
-                        UPDATE mobile_users
-                        SET Balance = ?, Activity = ?
-                        WHERE User_name = ?;''', new_value)
-                        database.commit()
-                    else:
-                        print(f'{data[6]} have not enough founds')
-                        data[3] = 0
-                        data[4] = 'No'
-                        cursor.execute(f'''
-                        UPDATE mobile_users
-                        SET (Balance = {data[3]}, Activity = {data[4]})
-                        WHERE User_name = {data[6]};''')
-                        database.commit()
+                print('List users: ', *x)
+                count = 0
+                flag = True
+                while count != int(period) and flag is True:
+                    for data in x:
+                        if data[3] == 'Yes':
+                            data[2] = data[2] - data[1]
+                            if data[1] > data[2]:
+                                data[3] = 'No'
+                                new_value_data = (data[2], data[3], data[0])
+                                cursor.execute(f'''
+                                UPDATE mobile_users
+                                SET Balance = ?, Activity = ?
+                                WHERE User_name = ?;''', new_value_data)
+                                database.commit()
+                            new_value_data = (data[2], data[3], data[0])
+                            cursor.execute(f'''
+                            UPDATE mobile_users
+                            SET Balance = ?, Activity = ?
+                            WHERE User_name = ?;''', new_value_data)
+                            database.commit()
+                            print(f'Data {data[0]} has been updated')
+                        elif data[3] == 'Yes':
+                            print(f'{data[0]} have not enough founds')
+                            data[2] = 0
+                            data[3] = 'No'
+                            cursor.execute(f'''
+                                UPDATE mobile_users
+                                SET (Balance = {data[2]}, Activity = {data[3]})
+                                WHERE User_name = {data[0]};''')
+                            database.commit()
+                            print(f'Data {data[0]} has been updated')
+                    cursor.execute('''
+                    SELECT User_name, Balance, Activity
+                    FROM mobile_users;''')
+                    after = cursor.fetchall()
+                    flag = 'Yes' in [after[i][2] for i in range(len(after))]
+                    count += 1
+                    print(f'After {count} month:', *after)
 
-                cursor.execute('''
-                SELECT User_name, Balance, Activity
-                FROM mobile_users;''')
-                after = cursor.fetchall()
-                print('After', *after)
             except:
                 print('Somthing went wrong!')

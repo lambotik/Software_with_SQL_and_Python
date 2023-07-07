@@ -3,24 +3,29 @@ from database.database_path import DATABASE_DIR
 
 
 def check_that_int():
-    """This function check that user enter int character"""
+    """
+    This function check that user enter int character
+    :return: num
+    """
     while True:
         print('Enter the Code number:')
         try:
             num = int(input())
             return num
-            break
-        except ValueError:
-            print('You must enter a number!')
+        except Exception as Ex:
+            print('You must enter a number!\n', Ex)
 
 
 def select_one_option():
-    """Select one position from options:
+    """
+    Select one position from options:
     1=Registration
 
     2=Authorisation
 
-    3=Password recovery"""
+    3=Password recovery
+    :return: option
+    """
 
     options_list = [1, 2, 3]
     while True:
@@ -34,6 +39,9 @@ def select_one_option():
 
 
 def check_login():
+    """
+    :return: login or check_login()
+    """
     database = sqlite3.connect(DATABASE_DIR / (r'registration' + '.db'))  # Creating database
     print('Connecting to database')
     cursor = database.cursor()  # Variable to control the database
@@ -74,6 +82,9 @@ def check_login():
 
 
 def check_password():
+    """
+    :return: password or check_password()
+    """
     while True:
         print('Input your Password:')
         password = input()
@@ -100,7 +111,6 @@ def check_that_int():
         try:
             num = int(input())
             return num
-            break
         except ValueError:
             print('You must enter a number!')
             print('Try again?')
@@ -111,23 +121,26 @@ def check_that_int():
                 continue
             else:
                 break
-        return check_that_int()
+        # return check_that_int()
 
 
 def registration():
+    """
+    :return: login, password, code
+    """
     while True:
         login = check_login()
-        if login == None:
+        if login is None:
             break
         password = check_password()
-        if password == None:
+        if password is None:
             break
-        if login != None and password != None:
+        if login is not None and password is not None:
             try:
                 code = check_that_int()
                 return login, password, code
-            except:
-                print('You entered bad data')
+            except Exception as Ex:
+                print('You entered bad data\n', Ex)
                 break
         else:
             print('You entered bad data')
@@ -135,6 +148,10 @@ def registration():
 
 
 def gen_dict(val):
+    """
+    :param val:
+    :return: login_password
+    """
     result = val
     login_password = {}
     for login, password, code in list(result):
@@ -144,13 +161,17 @@ def gen_dict(val):
 
 
 def check_login_and_password(database_dict):
+    """
+    :param database_dict:
+    :return:
+    """
     while True:
         print('Input your Login: ')
         login = input()
         if login in database_dict:
             print('Login is correct')
         else:
-            login in database_dict == False
+            # login in database_dict == False
             print('User not registered')
             break
         print('Input your Password: ')
@@ -172,6 +193,10 @@ def check_login_and_password(database_dict):
 
 
 def recovery_password(database_dict):
+    """
+    :param database_dict:
+    :return: password, login
+    """
     while True:
         print('Input your Login: ')
         login = input()
@@ -204,7 +229,6 @@ def recovery_password(database_dict):
                     return password, login
                 else:
                     break
-
             break
         else:
             print('Code is not correct')
@@ -239,48 +263,50 @@ try:
     user_in_database = cursor.fetchall()
     print('Table created')
     print('User added')
+except Exception as Ex:
+    print(Ex)
+    try:
+        print('\nPart #2')
+        choice = select_one_option()
+        if choice == 1:
+            try:
+                login, password, code = registration()
+            except TypeError:
+                print('Required fields: Login, Password, Code!!!')
+            cursor.execute('''select Login, Password, Code from users_data;''')
+            login_on_table = cursor.fetchall()
+            loginID_list = []
+            for i in range(len(login_on_table)):
+                loginID_list.append(login_on_table[i][0])
+            try:
+                if login not in loginID_list:
+                    cursor.execute(f'''INSERT INTO users_data
+                                        VALUES ('{login}','{password}', {code})''')
+                    database.commit()
+                    print(f'You have successfully created a user:')
+                    print(f'Login: {login}', f'Password: {password}', f'Code: {code}.', sep=', ')
+                    print(f'Registration complete')
+                else:
+                    print('Login is busy!!!')
+            except Exception as Ex:
+                print('Try Again!\n')
 
-    print('\nPart #2')
-    choice = select_one_option()
-    if choice == 1:
-        try:
-            login, password, code = registration()
-        except TypeError:
-            print('Required fields: Login, Password, Code!!!')
-        cursor.execute('''select Login, Password, Code from users_data;''')
-        login_on_table = cursor.fetchall()
-        loginID_list = []
-        for i in range(len(login_on_table)):
-            loginID_list.append(login_on_table[i][0])
-        try:
-            if login not in loginID_list:
-                cursor.execute(f'''INSERT INTO users_data
-                                    VALUES ('{login}','{password}', {code})''')
+        if choice == 2:
+            print('Authorization in the system')
+            cursor.execute('''Select Login, Password, Code from users_data;''')
+            result = cursor.fetchall()
+            database_dict = gen_dict(result)
+            check_login_and_password(database_dict)
+        if choice == 3:
+            cursor.execute('''Select Login, Password, Code from users_data;''')
+            result = cursor.fetchall()
+            database_dict = gen_dict(result)
+            try:
+                new_password, user_name = recovery_password(database_dict)
+                cursor.execute(f"""UPDATE users_data SET Password = '{new_password}' WHERE Login = '{user_name}';""")
                 database.commit()
-                print(f'You have successfully created a user:')
-                print(f'Login: {login}', f'Password: {password}', f'Code: {code}.', sep=', ')
-                print(f'Registration complete')
-            else:
-                print('Login is busy!!!')
-        except NameError:
-            print('Try Again!')
+            except Exception as Ex:
+                print('Password has not been recovered.\n')
 
-    if choice == 2:
-        print('Authorization in the system')
-        cursor.execute('''Select Login, Password, Code from users_data;''')
-        result = cursor.fetchall()
-        database_dict = gen_dict(result)
-        check_login_and_password(database_dict)
-    if choice == 3:
-        cursor.execute('''Select Login, Password, Code from users_data;''')
-        result = cursor.fetchall()
-        database_dict = gen_dict(result)
-        try:
-            new_password, user_name = recovery_password(database_dict)
-            cursor.execute(f"""UPDATE users_data SET Password = '{new_password}' WHERE Login = '{user_name}';""")
-            database.commit()
-        except TypeError:
-            print('Password has been recovered')
-
-finally:
-    cursor.close()
+    finally:
+        cursor.close()

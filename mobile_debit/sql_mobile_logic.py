@@ -84,7 +84,8 @@ class SQLMobileLogic:
 
     @staticmethod
     def added_data_to_report_mobile(date, operator, minute, amount):
-        """Operations Report.
+        f"""
+        Operations Report.
 
         Type_operation:
 
@@ -92,7 +93,13 @@ class SQLMobileLogic:
 
         2 = Mts_Tele2
 
-        3 = Mts_Yota"""
+        3 = Mts_Yota
+        :param date: {now_date}
+        :param operator: random.choice() from Mts_Mts, Mts_Tele2, Mts_Yota 
+        :param minute: random.randint(1, 10)
+        :param amount: random_operator * random_minute
+        :return: 
+        """
         user_data = [
             (date, operator, minute, amount)  # Table headers
         ]
@@ -105,6 +112,9 @@ class SQLMobileLogic:
 
     @staticmethod
     def cycle():
+        """
+        :return:
+        """
         with sqlite3.connect('mobile_calls.db') as database:
             cursor = database.cursor()
             cursor.execute('''
@@ -142,6 +152,4 @@ class SQLMobileLogic:
         final_balance = cursor.fetchone()
         print('Final balance:', final_balance[0])
 
-
-# SQLMobileLogic.create_report_mobile()
-
+# SQLMobileLogic.create_report_mobile()  # Uncomment and run this file to create a .csv report, then comment again

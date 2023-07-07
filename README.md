@@ -7,3 +7,4 @@
   - Login: Ivan
   - Password: qwer1234
   - Recovery code: 1234
+After type in command line ```python registration_authorization_recovery_password.py``` to test sofware.

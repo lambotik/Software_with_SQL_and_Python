@@ -4,6 +4,6 @@
 - to start exchanger_software.py type in command line: ```python exchanger_software.py``` and press ```ENTER```
 - to start registration_authorization_recovery_password.py type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER```.
   APP created database with test data:
-  Login: Ivan
-  Password: qwer1234
-  Recovery code: 1234
+  - Login: Ivan
+  - Password: qwer1234
+  - Recovery code: 1234

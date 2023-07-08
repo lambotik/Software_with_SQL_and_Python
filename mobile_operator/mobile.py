@@ -1,4 +1,4 @@
-from mobile_operator.mobile_logic import SQLMobile
+from mobile_logic import SQLMobile
 
 
 class MOBILE:

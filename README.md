@@ -9,8 +9,11 @@
 Disription:
 
 Prompts the user to select one of the available options:
+
 1.Registration - registration of a new user with entering data into the database.
+
 2.Authorisation - authorization of a previously registered user.
+
 3.Password recovery - password recovery by code.
 
 - to start registration_authorization_recovery_password.py

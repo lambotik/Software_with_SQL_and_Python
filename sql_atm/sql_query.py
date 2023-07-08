@@ -338,5 +338,5 @@ class SQLAtm:
             )
         print('Data has been added in: report_2.csv')
 
-# SQLAtm.create_report_operation_1()
-# SQLAtm.create_report_operation_2()
+SQLAtm.create_report_operation_1()
+SQLAtm.create_report_operation_2()

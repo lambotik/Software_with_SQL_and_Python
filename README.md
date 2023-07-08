@@ -14,6 +14,11 @@ The updated data is entered into the database.
 - to start exchanger_software.py
     - type in command line: ```python exchanger_software.py``` and press ```ENTER```
     ### Test data:
+  1 USD = 70 RUB
+  1 EUR = 80 RUB
+  1 USD = 0.87 EUR
+  1 EUR = 1.15 USD
+  Available funds on the user's account:  
   - RUB:10000
   - USD: 980
   - EUR: 1017

@@ -7,6 +7,7 @@
       
 ### APP registration_authorization_recovery_password:
 Disription:
+
 Prompts the user to select one of the available options:
 1.Registration - registration of a new user with entering data into the database.
 2.Authorisation - authorization of a previously registered user.

@@ -152,4 +152,4 @@ class SQLMobileLogic:
         final_balance = cursor.fetchone()
         print('Final balance:', final_balance[0])
 
-# SQLMobileLogic.create_report_mobile()  # Uncomment and run this file to create a .csv report, then comment again
+SQLMobileLogic.create_report_mobile()  # Uncomment and run this file to create a .csv report, then comment again

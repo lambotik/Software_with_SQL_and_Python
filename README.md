@@ -6,9 +6,16 @@
     - type in command line: ```python exchanger_software.py``` and press ```ENTER```
       
 ### APP registration_authorization_recovery_password:
+Disription:
+Prompts the user to select one of the available options:
+1.Registration - registration of a new user with entering data into the database.
+2.Authorisation - authorization of a previously registered user.
+3.Password recovery - password recovery by code.
+
 - to start registration_authorization_recovery_password.py
   - type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER```.
     APP created database with test data:
+    ### Test data:
     - Login: Ivan
     - Password: qwer1234
     - Recovery code: 1234

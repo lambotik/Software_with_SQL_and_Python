@@ -2,8 +2,21 @@
 ### 1. Type in command line: ```git clone https://github.com/lambotik/Software_with_SQL_and_Python.git```
 ### 2. Type in command line:```cd Software_with_SQL_and_Python```
 ### APP exchanger_software:
+Discription:
+
+Simulates the operation of a currency exchanger. The user is prompted:
+1. Select the currency he wants to exchange.
+2. Select the amount he wants to exchange.
+3. Select the currency for which he wants to exchange.
+After that, he is provided with a report on the operation.
+The updated data is entered into the database.
+
 - to start exchanger_software.py
     - type in command line: ```python exchanger_software.py``` and press ```ENTER```
+    ### Test data:
+  - RUB:10000
+  - USD: 980
+  - EUR: 1017
       
 ### APP registration_authorization_recovery_password:
 Disription:

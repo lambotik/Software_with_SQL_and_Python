@@ -27,7 +27,11 @@
       - Name: User1, Money: 10000, Tarrif: VIP (1000 per month), Activity: Yes.
       - Name: User2, Money: 10000, Tarrif: Premium (1500 per month), Activity: Yes.
       - Name: User3, Money: 10000, Tarrif: Standard (500 per month), Activity: Yes.
+        
 ### APP Mobile debit:
+    ### Dicsription:
+    Simulates making one call to a randomly selected operator for 30 days, the duration of each call is randomly from 1 to 10 minutes. Writes off funds from the account after each call and shows the full balance.
+    
 - to start mobile_month_cycle.py type in command line ```cd mobile_debit``` and press ```ENTER```.
   - #1 type in command line: ```python mobile_month_cycle.py``` and press ```ENTER```.
     ### Test data:

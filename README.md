@@ -22,6 +22,6 @@
      - card_2_number: 2345, pin_code: 2222, money: 10000
 ### APP Mobile_operator:
 - to start mobile.py type in command line ```cd Software_with_SQL_and_Python\mobile_operator``` and press ```ENTER```.
-      - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
+  - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
 
   

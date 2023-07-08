@@ -15,6 +15,15 @@
    - After type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER``` to test sofware.
      
 ### APP atm:
+Discription:
+This application simulates the operation of an ATM. The user enters the card number, pincode, if this user is in the database, then he is prompted to perform operations of his choice.
+1. Show balance information.
+2. Withdraw money.
+3.Deposit money.
+4. Finish work.
+5. Transfer money.
+After successful completion of the transaction with cash flow on the account, the data is updated in the database and entered into the generated report in .csv format.
+
 - to start atm.py
    - #1 type in command line: ```cd sql_atm``` and press ```ENTER```.
    - #2 type in command line: ```python atm.py``` and press ```ENTER```.
@@ -23,7 +32,7 @@
      - card_2_number: 2345, pin_code: 2222, money: 10000
        
 ### APP Mobile operator:
-Discription
+Discription:
 
 The user enters the billing period, and the application shows the balance on the user's account, if the user does not have enough funds, then the status of his Activity becomes No and the funds are no longer debited.
 

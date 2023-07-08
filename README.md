@@ -32,9 +32,9 @@
   - #1 type in command line: ```python mobile_month_cycle.py``` and press ```ENTER```.
     ### Test data:
     - Name: User, Money: 500.
-      Operators:
-      - Mts_Mts rate: 1 rub.
-      - Mts_Tele2 rate: 2 rub.
-      - Mts_Yota rate: 3 rub.
+      - Operators:
+          - Mts_Mts rate: 1 rub.
+          - Mts_Tele2 rate: 2 rub.
+          - Mts_Yota rate: 3 rub.
 
   

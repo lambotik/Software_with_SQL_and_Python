@@ -1,4 +1,4 @@
-from sql_atm.sql_query import SQLAtm
+from sql_query import SQLAtm
 
 
 class ATM:

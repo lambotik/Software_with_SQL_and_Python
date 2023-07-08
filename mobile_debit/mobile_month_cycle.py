@@ -1,4 +1,4 @@
-from mobile_debit.sql_mobile_logic import SQLMobileLogic
+from sql_mobile_logic import SQLMobileLogic
 
 
 class MonthCycle:
@@ -12,3 +12,4 @@ class MonthCycle:
 
 start = MonthCycle()
 start.month_cycle()
+exit()

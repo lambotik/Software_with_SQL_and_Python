@@ -26,7 +26,7 @@ The updated data is entered into the database.
   
   ### Available funds on the user's account:
     
-  - RUB:10000
+  - RUB: 10000
   - USD: 980
   - EUR: 1017
       

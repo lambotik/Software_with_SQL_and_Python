@@ -13,6 +13,7 @@
     - Password: qwer1234
     - Recovery code: 1234
    - After type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER``` to test sofware.
+### APP atm
 - to start atm.py
    - #1 type in command line: ```cd Software_with_SQL_and_Python\sql_atm``` and press ```ENTER```.
    - #2 type in command line: ```python atm.py``` and press ```ENTER```.

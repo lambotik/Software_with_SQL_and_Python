@@ -13,6 +13,7 @@
     - Password: qwer1234
     - Recovery code: 1234
    - After type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER``` to test sofware.
+     
 ### APP atm:
 - to start atm.py
    - #1 type in command line: ```cd sql_atm``` and press ```ENTER```.
@@ -20,7 +21,12 @@
      ### Test data:
      - card_1_number: 1234, pin_code: 1111, money: 10000
      - card_2_number: 2345, pin_code: 2222, money: 10000
+       
 ### APP Mobile operator:
+Discription
+
+The user enters the billing period, and the application shows the balance on the user's account, if the user does not have enough funds, then the status of his Activity becomes No and the funds are no longer debited.
+
 - to start mobile.py type in command line ```cd mobile_operator``` and press ```ENTER```.
   - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
     ### Test data:

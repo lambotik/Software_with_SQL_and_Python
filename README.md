@@ -16,4 +16,7 @@ After type in command line ```python registration_authorization_recovery_passwor
      ### Test data:
      - card_1_number: 1234, pin_code: 1111, money: 10000
      - card_2_number: 2345, pin_code: 2222, money: 10000
+- to start mobile.py type in command line ```cd Software_with_SQL_and_Python\mobile_operator``` and press ```ENTER```.
+      - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
+
   

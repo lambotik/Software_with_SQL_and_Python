@@ -14,6 +14,8 @@ The updated data is entered into the database.
 - to start exchanger_software.py
     - type in command line: ```python exchanger_software.py``` and press ```ENTER```
     ### Test data:
+  ### Exchange rates:
+  
   1 USD = 70 RUB
   
   1 EUR = 80 RUB

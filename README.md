@@ -16,12 +16,13 @@
      
 ### APP atm:
 Discription:
-This application simulates the operation of an ATM. The user enters the card number, pincode, if this user is in the database, then he is prompted to perform operations of his choice.
+This application simulates the operation of an ATM. The user enters the card number, pincode, if this user is in the database, then he is prompted to perform operations of his choice:
 1. Show balance information.
 2. Withdraw money.
 3. Deposit money.
 4. Finish work.
 5. Transfer money.
+   
 After successful completion of the transaction with cash flow on the account, the data is updated in the database and entered into the generated report in .csv format.
 
 - to start atm.py

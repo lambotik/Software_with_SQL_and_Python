@@ -23,5 +23,7 @@
 ### APP Mobile_operator:
 - to start mobile.py type in command line ```cd Software_with_SQL_and_Python\mobile_operator``` and press ```ENTER```.
   - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
+    - ### Test data:
+      - name user: User1, money: 10000, tarrif: 2, activity: Yes
 
   

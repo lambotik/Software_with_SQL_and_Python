@@ -32,6 +32,7 @@
 Dicsription:
 
 Simulates making one call to a randomly selected operator for 30 days, the duration of each call is randomly from 1 to 10 minutes. Writes off funds from the account after each call and shows the full balance.
+Generates a report in .csv format about calls made.
     
 - to start mobile_month_cycle.py type in command line ```cd mobile_debit``` and press ```ENTER```.
   - #1 type in command line: ```python mobile_month_cycle.py``` and press ```ENTER```.

@@ -15,17 +15,26 @@
    - After type in command line ```python registration_authorization_recovery_password.py``` and press ```ENTER``` to test sofware.
 ### APP atm:
 - to start atm.py
-   - #1 type in command line: ```cd Software_with_SQL_and_Python\sql_atm``` and press ```ENTER```.
+   - #1 type in command line: ```cd sql_atm``` and press ```ENTER```.
    - #2 type in command line: ```python atm.py``` and press ```ENTER```.
      ### Test data:
      - card_1_number: 1234, pin_code: 1111, money: 10000
      - card_2_number: 2345, pin_code: 2222, money: 10000
-### APP Mobile_operator:
-- to start mobile.py type in command line ```cd Software_with_SQL_and_Python\mobile_operator``` and press ```ENTER```.
+### APP Mobile operator:
+- to start mobile.py type in command line ```cd mobile_operator``` and press ```ENTER```.
   - #1 type in command line: ```python mobile.py``` and press ```ENTER```.
     ### Test data:
       - Name: User1, Money: 10000, Tarrif: VIP (1000 per month), Activity: Yes.
       - Name: User2, Money: 10000, Tarrif: Premium (1500 per month), Activity: Yes.
       - Name: User3, Money: 10000, Tarrif: Standard (500 per month), Activity: Yes.
+### APP Mobile debit:
+- to start mobile_month_cycle.py type in command line ```cd mobile_debit``` and press ```ENTER```.
+  - #1 type in command line: ```python mobile_month_cycle.py``` and press ```ENTER```.
+    ### Test data:
+    - Name: User, Money: 500.
+      Operators:
+      - Mts_Mts rate: 1 rub.
+      - Mts_Tele2 rate: 2 rub.
+      - Mts_Yota rate: 3 rub.
 
   
